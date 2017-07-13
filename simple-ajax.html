@@ -1,0 +1,36 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="simple-ajax">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `simple-ajax`
+     * custom element for ajax has simple interface
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class SimpleAjax extends Polymer.Element {
+      static get is() { return 'simple-ajax'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'simple-ajax'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(SimpleAjax.is, SimpleAjax);
+  </script>
+</dom-module>
