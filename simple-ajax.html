@@ -1,36 +1,93 @@
-<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+
+<!--
+JQuery의 ajax와 동일한 API를 가진 공통 비동기 통신 컴포넌트. jQuery.ajax의 인터페이스와 동일하게 사용하기 위해 만들었다.
+다만 인터페이스만 동일한 것이지 실제 API는 iron-ajax의 API를 사용한다. 즉, jQuery에서 지원하지 않아도 iron-ajax에서 지원하는 기능이면 사용할 수 있다. (반대는 불가하거나 순수 자바스크립트로 구현해야 함)
+iron-ajax의만의 기능 (method, event 등)은 그대로 유지한다.
+
+참고
+    1. 주로 사용하는 부분 위주로 구현하고 이후 필요한 부분이 있으면 추가함. 공통으로 사용할 것이니 수정시 협의 필요
+    2. 레퍼런스
+        - Polymer iron-ajax : https://www.webcomponents.org/element/PolymerElements/iron-ajax/elements/iron-ajax
+        - jQuery ajax : http://api.jquery.com/jquery.ajax
+-->
 
 <dom-module id="simple-ajax">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
-  </template>
+    <template>
+        <iron-ajax id="ajax"
+                   url="{{url}}"
+                   handle-as="{{dataType}}">
+        </iron-ajax>
+    </template>
 
-  <script>
-    /**
-     * `simple-ajax`
-     * custom element for ajax has simple interface
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class SimpleAjax extends Polymer.Element {
-      static get is() { return 'simple-ajax'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'simple-ajax'
-          }
-        };
-      }
-    }
+    <script>
+        (function(){
+            let _this;
+            /**
+             * `simple-ajax`
+             * custom element for ajax has simple interface
+             *
+             * @customElement
+             * @polymer
+             * @demo demo/index.html
+             */
+            class SimpleAjax extends Polymer.Element {
+                static get is() {
+                    return 'simple-ajax';
+                }
 
-    window.customElements.define(SimpleAjax.is, SimpleAjax);
-  </script>
+                constructor(){
+                    super();
+                    _this = this;
+                }
+
+                static get properties() {
+                    return {
+                        url : String,
+                        type : String,
+                        data : {},
+                        success :{},
+                        /**
+                         * 서버에서 예상하는 데이터의 유형. jquery에서는 기본값으로 응답의 MIME 타입을 통하여 유추한다.
+                         * 여기서의 기본값은 iron-ajax의 기본값과 동일함
+                         */
+                        dataType: {
+                            type: String
+                        },
+                        contentType : {
+                            type : String,
+                            value : "application/x-www-form-urlencoded; charset=UTF-8"
+                        },
+                        success : {
+                            type : Function,
+                            value : null
+                        },
+                        //해당 옵션이 true로 들어오는 경우 promise 객체를 넘겨줌
+                        promise : {
+
+                        }
+                    };
+                }
+
+                call (option){
+                    let url = option.url;
+                    if(!url){
+                        console.error("요청에 필요한 url이 정의되지 않았습니다.");
+                        return;
+                    }
+                    _this.url = url;
+
+                    _this.$.ajax.generateRequest().completes.then(function (xhr) {
+                        let response = xhr.response;
+                        let successCallback = option.success;
+                        if(successCallback){
+                            successCallback(response);
+                        }
+                    });
+                }
+            }
+            window.customElements.define(SimpleAjax.is, SimpleAjax);
+        })();
+    </script>
 </dom-module>
