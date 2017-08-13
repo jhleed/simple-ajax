@@ -1,21 +1,4 @@
 # \<simple-ajax\>
 
-custom element for ajax has simple interface
-
-## Install the Polymer-CLI
-
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your element locally.
-
-## Viewing Your Element
-
-```
-$ polymer serve
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Polymer에서 제공해주는 iron-ajax의 기능 + jquery의 $.ajax 의 interface를 가진 커스텀 컴포넌트.
+jquery의 $.ajax에 익숙한 개발자들은 이 커스텀 컴포넌트를 통하여 요청을 쉽게 할 수 있다.
